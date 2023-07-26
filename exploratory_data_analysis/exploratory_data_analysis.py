@@ -19,7 +19,7 @@ def chi_square_test(df, col1, col2):
     print(f"Chi-square statistic: {chi2}, p-value: {p}")
 
 # data read
-df = pd.read_csv("../dataset/metadata.csv")
+df = pd.read_csv("./dataset/metadata.csv")
 
 # Basic Information
 print("The dataset has", df.shape[0], "rows and", df.shape[1], "columns.\n")
