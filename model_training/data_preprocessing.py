@@ -1,6 +1,7 @@
 from skimage.feature import graycomatrix, graycoprops
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import RandomOverSampler  
 from sklearn.preprocessing import StandardScaler
 from collections import defaultdict
 
@@ -32,9 +33,8 @@ for folder in dataset_folders:
         metadata_row = metadata.loc[metadata['image_id'] == image_id].values.tolist()[0]
         datasets[folder].append(metadata_row + features)
 
-        if len(datasets[folder]) % 1000 == 0:
+        if len(datasets[folder]) % 100 == 0:
             print(f"Extracted features for {len(datasets[folder])} images in {folder}.")
-            break
 
 # Processing each of the datasets separately
 for folder in dataset_folders:
@@ -62,6 +62,8 @@ for folder in dataset_folders:
     if folder == 'train':
         smote = SMOTE(random_state=42)
         X_res, y_res = smote.fit_resample(X, y_encoded)
+        # ros = RandomOverSampler(random_state=42)  # Use RandomOverSampler instead of SMOTE
+        # X_res, y_res = ros.fit_resample(X, y_encoded)
         y_res = encoder.inverse_transform(y_res)
         new_dataset_df = pd.DataFrame(X_res, columns=X.columns)
         new_dataset_df['lesion_type'] = y_res
@@ -69,8 +71,7 @@ for folder in dataset_folders:
         new_dataset_df = X.copy()
         new_dataset_df['lesion_type'] = y.copy()
     
-    if folder == 'test':
-        new_dataset_df['image_id'] = image_ids
+    new_dataset_df['image_id'] = image_ids
 
     new_dataset_df.to_csv(f'dataset/preprocessed_{folder}_dataset.csv', index=False)
     print(f"\nSaved the preprocessed {folder} dataset.")
