@@ -38,5 +38,5 @@ lesion_type_predictions = [lesion_type_dict[pred] for pred in y_pred_test]
 json_output = [{"image_id": img_id, "lesion_type": lesion} for img_id, lesion in zip(image_ids_test, lesion_type_predictions)]
 
 # Save JSON output to a file
-with open('model_training/using only metadata/test_predictions.json', 'w') as f:
+with open('model_inference/using only metadata/test_predictions.json', 'w') as f:
     json.dump(json_output, f)
