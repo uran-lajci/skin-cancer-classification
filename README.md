@@ -28,36 +28,48 @@ The insights from the EDA will be pivotal in the subsequent phases of the machin
 
 ## Data Preprocessing
 
-1. **Feature Extraction:** For each image in the dataset, we calculate texture features using the Gray Level Co-occurrence Matrix (GLCM). The GLCM is a statistical method that examines the spatial relationship of pixels. It calculates the frequency of a pixel with intensity i being adjacent to a pixel with intensity j. The GLCM features that we calculate are contrast, dissimilarity, homogeneity, energy, correlation, and ASM (angular second moment). These features provide information about the texture of the image, which can be useful in distinguishing different types of skin lesions.
+1. **Feature Extraction**: For each image in the dataset, the script calculates texture features using the Gray Level Co-occurrence Matrix (GLCM). The GLCM is a statistical method that examines the spatial relationship of pixels in the grayscale images. It calculates the frequency of a pixel with intensity i being adjacent to a pixel with intensity j. The GLCM features computed for each image are contrast, dissimilarity, homogeneity, energy, correlation, and ASM (angular second moment). These features provide information about the texture of the image, which can be useful in distinguishing different types of skin lesions.
 
-2. **Metadata Preprocessing:** For the metadata, missing 'age' values are filled in with the mean age value. The preprocessing also includes one-hot encoding categorical variables ('sex', 'localization', 'confirmation') to convert them into a format that can be used by machine learning algorithms. We concatenate these newly created one-hot encoded columns to the original dataset and drop the original categorical columns.
+2. **Metadata Preprocessing**: The script handles missing 'age' values in the metadata by filling them in with the mean age value of the available data. Categorical variables ('sex', 'localization', 'confirmation') in the metadata are one-hot encoded to convert them into a format suitable for machine learning algorithms. The newly created one-hot encoded columns are then concatenated to the original dataset, and the original categorical columns are dropped.
 
-3. **Data Scaling:** The numerical features (age, contrast, dissimilarity, homogeneity, energy, correlation, and ASM) are scaled using StandardScaler from sklearn, which standardizes features by removing the mean and scaling to unit variance. Standardization can be crucial for many machine learning algorithms.
+3. **Data Scaling**: The numerical features (age, contrast, dissimilarity, homogeneity, energy, correlation, and ASM) in the dataset are scaled using the StandardScaler from the sklearn library. StandardScaler standardizes features by removing the mean and scaling them to have unit variance. This step is crucial for many machine learning algorithms to ensure that all features contribute equally to the model's performance.
 
-4. **Class Imbalance Handling (Only for Training Data):** The script handles the class imbalance problem in the training dataset using SMOTE (Synthetic Minority Over-sampling Technique). SMOTE creates synthetic observations of the minority class by introducing small variations into copies of the existing minority instances. After SMOTE, we have a balanced training dataset, which can improve the performance of the subsequent machine learning model.
+4. **Class Imbalance Handling (Only for Training Data)**: The script addresses the class imbalance problem in the training dataset using either SMOTE (Synthetic Minority Over-sampling Technique) or Random Over-sampling. If the user selects "smote," the script applies SMOTE to create synthetic observations of the minority class by introducing small variations into copies of the existing minority instances. If "roc" is chosen, the script uses Random Over-sampling to randomly duplicate samples from the minority class to balance the dataset. If the user selects "no_balance," the script does not handle the class imbalance issue, and the dataset remains unbalanced.
 
-5. **Data Saving:** Finally, each preprocessed dataset is saved as a new CSV file, which will be used for training, testing, and validating the machine learning model.
+5. **Data Saving**: Finally, after processing each dataset (train, test, validation), the preprocessed data is saved as a new CSV file. The file name includes the method used for class imbalance handling (if applicable) to indicate which preprocessing steps were applied. The saved preprocessed datasets will be used for training, testing, and validating the machine learning model.
+
+Note: The script reads the metadata from a CSV file named 'metadata.csv' and the images from the respective folders ('train', 'test', 'validation') within the 'dataset/images/' directory. The user is prompted to choose the method for handling class imbalance, and based on the choice, the script performs the necessary data preprocessing steps.
 
 ## Model Training
 
-This script random_forest.py trains a Random Forest Classifier on a skin lesion dataset to predict different lesion types. The data is split into features and targets for both training and validation sets. The model is then trained using the training data and predictions are made on the validation set.
+The script `rfc_and_dtc.py` and `cnn.py` perform training of machine learning models for predicting skin lesion types. The data preprocessing steps are assumed to be completed beforehand using the `data_preprocessing.py` script.
 
-Performance metrics including accuracy, precision, recall, and F1-score are calculated to evaluate the model. These metrics provide an understanding of the model's performance on correctly predicting the various skin lesion types.
+1. **rfc_and_dtc.py**: This script allows you to choose a dataset version (`no_balance`, `smote`, or `roc`) and the machine learning algorithm (`RFC` for Random Forest Classifier or `DTC` for Decision Tree Classifier). It then loads the preprocessed datasets, splits them into features and targets for training and validation sets, builds and fits the selected model, and finally evaluates its performance using various metrics. The trained model is saved using the joblib library for future use.
 
-Finally, the trained model is saved using joblib, enabling it to be used for future predictions on new data.
+2. **cnn.py**: This script uses convolutional neural networks (CNNs) to train a model for image classification. It loads the metadata, preprocesses it by converting image IDs to the appropriate format, and creates an ImageDataGenerator with data augmentation settings. The script then generates data flow for both training and validation datasets using the ImageDataGenerator. The CNN model is defined, compiled, and trained on the generated data. The trained CNN model is then saved in the h5 format.
 
 ## Model Inference
 
-This script, `model_inference.py`, conducts the inference process on the preprocessed test dataset using a trained Random Forest Classifier. The key steps are as follows:
+The script `model_inference.py` conducts the inference process on the preprocessed test dataset using a trained machine learning model, which can either be a Random Forest Classifier (RFC) or a Decision Tree Classifier (DTC). The key steps are as follows:
 
-1. **Data Preparation**: The test dataset is loaded and separated into image IDs and features. The image IDs are saved for the final output, while the features are used for prediction.
+1. **Data Preparation**: The test dataset is loaded from the file "dataset/no_balance_preprocessed_test_dataset.csv." The features (i.e., image attributes) are separated from the dataset, and the corresponding image IDs are saved for the final output. These features will be used for prediction.
 
-2. **Model Loading**: The pre-trained Random Forest Classifier is loaded into memory using the `joblib` library. This model has been previously trained on skin lesion images and can predict the type of skin lesion in new images.
+2. **Model Loading**: The script prompts the user to choose either "RFC" for Random Forest Classifier or "DTC" for Decision Tree Classifier. The pre-trained model of the selected algorithm is then loaded into memory using the `joblib` library. The model has been previously trained on skin lesion images and can predict the type of skin lesion in new images.
 
 3. **Prediction**: The model is applied to the features of the test dataset, predicting a numerical label for the lesion type in each image.
 
 4. **Decoding Predictions**: The numerical predictions are then converted back into their original string format ("BKL", "NV", "DF", "MEL", "VASC", "BCC", "AKIEC") using a mapping dictionary.
 
-5. **Output Preparation**: The output is prepared as a list of dictionaries. Each dictionary corresponds to an image in the test dataset and contains the image ID and the predicted lesion type.
+5. **Output Preparation**: The output is prepared as a list of dictionaries. Each dictionary corresponds to an image in the test dataset and contains the image ID and the predicted lesion type in string format.
 
-6. **Output Saving**: Finally, the output list is saved to a JSON file. This file can be used to check the model's predictions for each image in the test dataset.
+6. **Output Saving**: Finally, the output list is saved to a JSON file named "{algorithm_choice}_output.json" in the "model_inference" directory. This JSON file can be used to check the model's predictions for each image in the test dataset.
+
+## Results
+
+**CNN Resulsts**
+
+![image](https://github.com/uran-lajci/skin-cancer-classification/assets/117693854/54428c4e-f4ab-4d81-be7a-a3b39a19371c)
+
+**Decision Tree Classifier and Random Forest Classifier Results**
+
+![image](https://github.com/uran-lajci/skin-cancer-classification/assets/117693854/e4fd4b1d-e266-4ae0-9d8a-b1264875000f)
