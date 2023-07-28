@@ -73,3 +73,11 @@ The script `model_inference.py` conducts the inference process on the preprocess
 **Decision Tree Classifier and Random Forest Classifier Results**
 
 ![image](https://github.com/uran-lajci/skin-cancer-classification/assets/117693854/e4fd4b1d-e266-4ae0-9d8a-b1264875000f)
+
+## Resources
+
+- https://www.kaggle.com/datasets/kmader/skin-cancer-mnist-ham10000
+- https://github.com/bundasmanu/skin_mnist
+- https://www.nature.com/articles/s41598-022-22644-9
+- https://www.apriorit.com/dev-blog/647-ai-applying-deep-learning-to-classify-skin-cancer-types
+- https://www.youtube.com/watch?v=nVhau51w6dM
