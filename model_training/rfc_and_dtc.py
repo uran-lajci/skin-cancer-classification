@@ -33,7 +33,7 @@ def get_algorithm_choice():
 
 def load_data(dataset_choice):
     train_df = pd.read_csv(f"dataset/{dataset_choice}_preprocessed_train_dataset.csv")
-    valid_df = pd.read_csv(f"dataset/{dataset_choice}_preprocessed_validation_dataset.csv")
+    valid_df = pd.read_csv(f"dataset/preprocessed_validation_dataset.csv")
     return train_df, valid_df
 
 
@@ -82,7 +82,6 @@ def evaluate_model(model, x_valid, y_valid):
     
 if __name__ == "__main__":
     dataset_choice = get_dataset_choice()
-
     train_df, valid_df = load_data(dataset_choice)
 
     x_train, y_train, x_valid, y_valid = separate_data(train_df, valid_df)
@@ -93,5 +92,5 @@ if __name__ == "__main__":
 
     evaluate_model(model, x_valid, y_valid)
 
-    joblib.dump(model, f"model_training/{algorithm_choice}_model.pt")
+    joblib.dump(model, f"model_training/models/{algorithm_choice}_{dataset_choice}_model.pt")
     print(f"Saved the {algorithm_choice} model.")

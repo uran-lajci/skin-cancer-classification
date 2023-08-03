@@ -4,7 +4,7 @@ import json
 
 
 def load_test_data():
-    test_dataset_path = f"dataset/no_balance_preprocessed_test_dataset.csv"
+    test_dataset_path = f"dataset/preprocessed_test_dataset.csv"
     test_df = pd.read_csv(test_dataset_path)
     x_test = test_df.drop(['image_id', 'lesion_type'], axis=1)
     image_ids = test_df['image_id']
@@ -16,13 +16,14 @@ def load_model(algorithm_choice):
         print(f"Invalid algorithm choice: \"{algorithm_choice}\". Please choose either 'RFC' or 'DTC'.")
         algorithm_choice = input("Choice: ")
 
-    model_path = f'model_training/{algorithm_choice}_model.pt'
+    model_path = f'model_training/models/{algorithm_choice}_roc_model.pt'
     rfc = joblib.load(model_path)
     return rfc
 
 
 def predict_using_model(model, x_test, image_ids):
     y_pred = model.predict(x_test)
+
     # Create a mapping dictionary for lesion type labels
     lesion_type_mapping = {
         0: "BKL",

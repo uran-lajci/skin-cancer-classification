@@ -79,5 +79,5 @@ if __name__ == "__main__":
           validation_steps=valid_generator.n//valid_generator.batch_size,
           epochs=10)
 
-    model.save("model_training/cnn_model.h5")
+    model.save("model_training/models/cnn_model.h5")
     print("Saved the cnn model.")
