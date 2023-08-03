@@ -6,7 +6,7 @@ The aim of this project is to develop a machine learning model for skin cancer c
 
 - **Dataset Structure**: The dataset consists of six variables, including both categorical and continuous types. 'Age' is the only continuous variable, while the rest (lesion type, confirmation method, gender, localization) are categorical.
 
-- **Missing Values Handling**: Missing values were present in the 'age' attribute. These were filled using the mean age value, ensuring a complete dataset for model training.
+- **Missing Values Handling**: Missing values were present in the 'age' attribute. (These will be handled in the preprocessing script).
 
 - **Lesion Type Distribution**: Lesion types are not evenly distributed across the dataset. There is a notable class imbalance, with a substantial bias towards the '1' category. This highlights the need for strategies to address class imbalance during model training.
 
@@ -18,7 +18,11 @@ The aim of this project is to develop a machine learning model for skin cancer c
 
 - **Lesion Localization**: The most common lesion localizations were 'back' and 'lower extremity'. The location of a lesion may be an important predictor of its type.
 
-- **Statistical Correlations**: Significant correlations were found between 'confirmation' and 'lesion_type', 'sex' and 'lesion_type', and 'localization' and 'lesion_type', suggesting these variables could be informative predictors. However, the Pearson correlation between 'lesion_type' and 'age' was low, indicating a weak linear relationship.
+- **Chi-square Correlations**: 
+* 'confirmation' and 'lesion_type': A significant association is found (p-value = 0.0), indicating that the confirmation method might be related to the lesion type.
+* 'sex' and 'lesion_type': A significant association is found (p-value < 0.001), showing that the sex of the patient might be connected to the lesion type.
+* 'localization' and 'lesion_type': A significant association (p-value = 0.0) suggests that the localization of the lesion may be related to its type.
+* 'confirmation' and 'sex' with 'localization': A significant association (p-value = 0.0) indicates that the combination of confirmation and sex might be related to the localization of the lesion.
 
 - **Choice of Machine Learning Model**: Given the dataset characteristics, suitable machine learning models for the classification task might include decision trees, random forests, gradient boosting, or neural network-based classifiers.
 
