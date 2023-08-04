@@ -85,3 +85,6 @@ The script `model_inference.py` conducts the inference process on the preprocess
 - https://www.nature.com/articles/s41598-022-22644-9
 - https://www.apriorit.com/dev-blog/647-ai-applying-deep-learning-to-classify-skin-cancer-types
 - https://www.youtube.com/watch?v=nVhau51w6dM
+- https://www.youtube.com/playlist?list=PLkDaE6sCZn6Gl29AoE31iwdVwSG-KnDzF
+- Chat GPT (Version 3.5 and 4)
+- Stack Overflow
