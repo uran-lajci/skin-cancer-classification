@@ -72,7 +72,8 @@ The script `model_inference.py` conducts the inference process on the preprocess
 
 **CNN Resulsts**
 
-![image](https://github.com/uran-lajci/skin-cancer-classification/assets/117693854/54428c4e-f4ab-4d81-be7a-a3b39a19371c)
+![CNN Results](https://github.com/uran-lajci/skin-cancer-classification/assets/117693854/b7596c75-9f86-4a38-a610-acb7a6063c08)
+
 
 **Decision Tree Classifier and Random Forest Classifier Results**
 
